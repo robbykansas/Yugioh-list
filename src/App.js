@@ -1,6 +1,7 @@
 import React from 'react'
 import TableCard from './components/TableCard'
 import useFetch from './hooks/useFetch'
+import Navbar from './components/Navbar'
 
 function App () {
   const {
@@ -9,59 +10,72 @@ function App () {
     error
   } = useFetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?type=ritual%20effect%20monster')
 
+  const [type, setType] = React.useState()
+
+  function changeType(data) {
+    setType(data)
+    console.log(type)
+  }
+
   if(error) return <h2>Error</h2>
   if(loading) return <img src='https://ak6.picdn.net/shutterstock/videos/28831216/thumb/1.jpg' alt='loadingImg' style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
+
+  const columns = 
+  [
+    {
+      Header: 'Id',
+      accessor: 'id',
+    },
+    {
+      Header: 'Image',
+      accessor: 'card_images[0].image_url_small',
+      Cell: (image) => {
+        return (
+          <div>
+            <img src={image.cell.value} alt='gambar'/>
+          </div>
+        )
+      }
+    },
+    {
+      Header: 'Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Level',
+      accessor: 'level',
+    },
+    {
+      Header: 'Atk',
+      accessor: 'atk',
+    },
+    {
+      Header: 'Def',
+      accessor: 'def',
+    },
+    {
+      Header: 'Description',
+      accessor: 'desc',
+    },
+    {
+      Header: 'Action',
+      Cell: ({ cell }) => (
+        <button className="btn btn-outline-primary">Detail</button>
+      )
+    }
+  ]
+
+  const data = card.data
+
   return (
-    <div className='container'>
-      <table className='table'>
-        <thead>
-          <tr className='table-dark'>
-            <td>Id</td>
-            <td>Image</td>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Action</td>
-          </tr>
-        </thead>
-        <TableCard cards={card.data} />
-      </table>
+    <div>
+      <Navbar changeType={changeType}/>
+      <div className='container mt-5'>
+        <TableCard columns={columns} data={data} />
+      </div>
     </div>
   )
 
 }
-
-// class App extends React.Component {
-//   constructor() {
-//     super()
-//     this.state = { cards: [] }
-//   }
-
-  // componentDidMount() {
-  //   fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?type=ritual%20effect%20monster')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       this.setState({cards: data.data})
-  //     })
-  // }
-//   render() {
-//     console.log(this.state)
-//     return (
-//       <div>
-//         <table className='table'>
-//           <thead>
-//             <tr className='table-dark'>
-//               <td>Id</td>
-//               <td>Image</td>
-//               <td>Name</td>
-//               <td>Description</td>
-//               <td>Action</td>
-//             </tr>
-//           </thead>
-//           <TableCard cards={this.state.cards} />
-//         </table>
-//       </div>
-//     )
-//   }
-// }
 
 export default App;

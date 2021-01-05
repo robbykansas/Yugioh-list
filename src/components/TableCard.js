@@ -1,22 +1,52 @@
 import React from 'react'
+import { useTable, useSortBy } from 'react-table'
 
-function TableCard (props) {
+function TableCard ({columns, data}) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy
+  )
   return (
-    <tbody>
-        {props.cards.map(data =>
-          <tr key={data.id}>
-            <td>{data.id}</td>
-            <td><img src={data.card_images[0].image_url_small} alt='gambar'/></td>
-            <td>{data.name}</td>
-            <td>{data.desc}</td>
-            <td>
-              <button className="btn btn-outline-primary">Detail</button>
-              <button className="btn btn-outline-success">Favorites</button> <br />
-              <small>Still not implemented</small>
-            </td>
+    <div>
+      <table {...getTableProps()} className='table'>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()} className='table-dark'>
+            {headerGroup.headers.map(column => (
+            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render('Header')}
+                <span>
+                 {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                </span>
+              </th>
+            ))}
           </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map(
+          (row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+              </tr>
+            )}
         )}
       </tbody>
+    </table>
+    </div>
   )
 }
 
