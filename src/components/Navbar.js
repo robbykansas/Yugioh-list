@@ -13,6 +13,14 @@ function Navbar(props) {
     }
   }
 
+  function goFavorites() {
+    if (history.location.pathname === '/Favorites') {
+      console.log('already in this route')
+    } else {
+      history.push('/Favorites')
+    }
+  }
+
   function HandleSelect(e) {
     const type = e.replace(/ /g,"%20").toLowerCase()
     props.changeType(type)
@@ -61,10 +69,11 @@ function Navbar(props) {
         </DropdownButton>
       )}
       { history.location.pathname === '/' && (
-        <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary'>
+        <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary' style={{marginRight: '5px'}}>
           {ExtraDeckType.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
         </DropdownButton>
       )}
+      <button className='btn btn-outline-primary' onClick={goFavorites}>Favorites</button>
       </nav>
     </div>
   )
