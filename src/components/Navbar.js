@@ -1,47 +1,60 @@
 import React from 'react'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 function Navbar(props) {
   function goHome() {
     console.log('goHome')
   }
-  function RitualMonster() {
-    const type = 'ritual%20monster'
+
+  function HandleSelect(e) {
+    const type = e.replace(/ /g,"%20").toLowerCase()
     props.changeType(type)
   }
-  function RitualEffectMonster() {
-    const type = 'ritual%20effect%20monster'
-    props.changeType(type)
-  }
+
+  const TypeMonster = [
+    "Effect Monster",
+    "Flip Effect Monster",
+    "Flip Tuner Effect Monster",
+    "Gemini Monster",
+    "Normal Monster",
+    "Normal Tuner Monster",
+    "Pendulum Effect Monster",
+    "Pendulum Flip Effect Monster",
+    "Pendulum Normal Monster",
+    "Pendulum Tuner Effect Monster",
+    "Ritual Effect Monster",
+    "Ritual Monster",
+    "Skill Card",
+    "Spell Card",
+    "Spirit Monster",
+    "Toon Monster",
+    "Trap Card",
+    "Tuner Monster",
+    "Union Effect Monster",
+  ]
+
+  const ExtraDeckType = [
+    "Fusion Monster",
+    "Link Monster",
+    "Pendulum Effect Fusion Monster",
+    "Synchro Monster",
+    "Synchro Pendulum Effect Monster",
+    "Synchro Tuner Monster",
+    "XYZ Monster",
+    "XYZ Pendulum Effect Monster",
+  ]
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href={goHome}>Yu-Gi-Oh Card List</a>
-      <div className="dropdown mr-auto">
-      <button className="btn btn-sm btn-outline-primary rounded-pill font-weight-bold text-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Filter
-      </button>
-      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a className="dropdown-item" href={RitualMonster}>Ritual Monster</a>
-        <a className="dropdown-item" href={RitualEffectMonster}>Another action</a>
-      </div>
-    </div>
-        {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href='#' id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                List Type
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href={RitualMonster}>Ritual Monster</a>
-                <a className="dropdown-item" href={RitualEffectMonster}>Another action</a>
-              </div>
-            </li>
-          </ul>
-        </div> */}
+      <a className="navbar-brand" href='#/goHome' onClick={goHome}>Yu-Gi-Oh Card List</a>
+      <DropdownButton id="dropdown-basic-button" title="Main Deck Types" onSelect={HandleSelect}>
+        {TypeMonster.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
+      </DropdownButton>
+      <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary'>
+        {ExtraDeckType.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
+      </DropdownButton>
       </nav>
     </div>
   )
