@@ -23,9 +23,7 @@ function MainPage () {
     setType(data)
   }
 
-  function Detail(e) {
-    const id = e.target.value
-    console.log(e.target.value)
+  function handleDetail(id) {
     if(id === undefined) {
       console.log('error')
     } else {
@@ -33,8 +31,8 @@ function MainPage () {
     }
   }
 
-  function Favorites(e) {
-    fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${e.target.value}`)
+  function handleFavorites(id) {
+    fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${id}`)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -89,14 +87,14 @@ function MainPage () {
       Header: 'Detail',
       Cell: ({ cell }) => (
         <div>
-          <button className="btn btn-outline-primary" value={cell.row.original.id} onClick={Detail}><i className="fas fa-info-circle"></i></button>
+          <button className="btn btn-outline-primary" value={cell.row.original.id} onClick={() => handleDetail(cell.row.original.id)}><i className="fas fa-info-circle"></i></button>
         </div>
       )
     },
     {
       Header: 'Favorites',
       Cell: ({ cell }) => (
-        <button className="btn btn-outline-warning" value={cell.row.original.id} onClick={Favorites}><i className="fas fa-star"></i></button>
+        <button className="btn btn-outline-warning" value={cell.row.original.id} onClick={() => handleFavorites(cell.row.original.id)}><i className="fas fa-star"></i></button>
       )
     }
   ]

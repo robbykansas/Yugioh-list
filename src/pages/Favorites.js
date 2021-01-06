@@ -6,8 +6,7 @@ import { useHistory } from 'react-router-dom'
 
 function Favorites() {
   const history = useHistory()
-  function Detail(e) {
-    const id = e.target.value
+  function handleDetail(id) {
     if(id === undefined) {
       console.log('error')
     } else {
@@ -57,7 +56,7 @@ function Favorites() {
       Cell: ({ cell }) => (
         <div>
           {console.log(cell.row.original)}
-          <button className="btn btn-outline-primary" value={cell.row.original.id} onClick={Detail}><i className="fas fa-info-circle"></i></button>
+          <button className="btn btn-outline-primary" value={cell.row.original.id} onClick={() => handleDetail(cell.row.original.id)}><i className="fas fa-info-circle"></i></button>
         </div>
       )
     }
