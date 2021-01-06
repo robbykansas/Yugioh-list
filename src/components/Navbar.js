@@ -1,10 +1,16 @@
 import React from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
+import { useHistory } from 'react-router-dom'
 
 function Navbar(props) {
+  const history = useHistory()
   function goHome() {
-    console.log('goHome')
+    if (history.location.pathname === '/') {
+      console.log('already in this route')
+    } else {
+      history.push('/')
+    }
   }
 
   function HandleSelect(e) {
@@ -49,12 +55,16 @@ function Navbar(props) {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <a className="navbar-brand" href='#/goHome' onClick={goHome}>Yu-Gi-Oh Card List</a>
-      <DropdownButton id="dropdown-basic-button" title="Main Deck Types" onSelect={HandleSelect}>
-        {TypeMonster.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
-      </DropdownButton>
-      <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary'>
-        {ExtraDeckType.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
-      </DropdownButton>
+      { history.location.pathname === '/' && (
+        <DropdownButton id="dropdown-basic-button" title="Main Deck Types" onSelect={HandleSelect} style={{marginRight: '5px'}}>
+          {TypeMonster.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
+        </DropdownButton>
+      )}
+      { history.location.pathname === '/' && (
+        <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary'>
+          {ExtraDeckType.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
+        </DropdownButton>
+      )}
       </nav>
     </div>
   )
