@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import Detail from './pages/Detail'
 import Favorites from './pages/Favorites'
+import About from './pages/About'
 
 function App () {
   return (
@@ -13,8 +14,11 @@ function App () {
       <Route path='/Favorites'>
         <Favorites />
       </Route>
-      <Route path='/'>
+      <Route path='/Main'>
         <MainPage />
+      </Route>
+      <Route path='/'>
+        <About />
       </Route>
     </Switch>
   )

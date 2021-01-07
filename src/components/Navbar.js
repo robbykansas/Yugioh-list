@@ -5,6 +5,14 @@ import { useHistory } from 'react-router-dom'
 
 function Navbar(props) {
   const history = useHistory()
+  function goMainPage() {
+    if (history.location.pathname === '/Main') {
+      console.log('already in this route')
+    } else {
+      history.push('/Main')
+    }
+  }
+
   function goHome() {
     if (history.location.pathname === '/') {
       console.log('already in this route')
@@ -61,19 +69,30 @@ function Navbar(props) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href='#/goHome' onClick={goHome}>Yu-Gi-Oh Card List</a>
-      { history.location.pathname === '/' && (
-        <DropdownButton id="dropdown-basic-button" title="Main Deck Types" onSelect={HandleSelect} style={{marginRight: '5px'}}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul className="navbar-nav mr-auto">
+        <li className="nav-item active">
+          <a className="nav-link" href='#/hoHome' onClick={goHome}>Yu-Gi-Oh</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href='#/goMainPage' onClick={goMainPage}>Card List</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href='#/goFavorites' onClick={goFavorites}>Favorites</a>
+        </li>
+      </ul>
+      { history.location.pathname === '/Main' && (
+        <DropdownButton id="dropdown-basic-button" title="Main Deck Types" onSelect={HandleSelect} style={{marginRight: '5px', marginLeft: 'auto'}}>
           {TypeMonster.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
         </DropdownButton>
       )}
-      { history.location.pathname === '/' && (
+      { history.location.pathname === '/Main' && (
         <DropdownButton id="dropdown-basic-button" title="Extra Deck Types" onSelect={HandleSelect} variant='secondary' style={{marginRight: '5px'}}>
           {ExtraDeckType.map(type => <Dropdown.Item key={ type } href={`#type${type.replace(/\s/g, '')}`} eventKey={ type }>{ type }</Dropdown.Item>)}
         </DropdownButton>
       )}
-      <button className='btn btn-outline-primary' onClick={goFavorites}>Favorites</button>
+      </div>
       </nav>
     </div>
   )

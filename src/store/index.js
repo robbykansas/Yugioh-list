@@ -1,18 +1,13 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import thunk from 'redux-thunk'
+import favoritesReducer from './reducers/favoritesReducer'
+import cardsReducer from './reducers/cardsReducer'
 
-const initialState = {
-  favorites: []
-}
+const rootReducer = combineReducers({
+  favorites: favoritesReducer,
+  cards: cardsReducer
+})
 
-function reducer( state = initialState, action ){
-  switch(action.type) {
-    case "favorites/setFavorites":
-      return { ...state, favorites: [...state.favorites, action.payload] }
-    default:
-      return state
-  }
-}
-
-const store = createStore(reducer)
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 export default store

@@ -1,21 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TableCard from '../components/TableCard'
-import useFetch from '../hooks/useFetch'
 import Navbar from '../components/Navbar'
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { setFavorites } from '../store/action'
+import { setFavorites, fetchCards } from '../store/actions/action'
 
 function MainPage () {
   const [type, setType] = React.useState('ritual%20effect%20monster')
   const history = useHistory()
-  const {
-    data: card,
-    loading,
-    error
-  } = useFetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?type=${type}`)
-  const favorites = useSelector(state => state.favorites)
+  const favorites = useSelector(state => state.favorites.favorites)
+  const cards = useSelector(state => state.cards.cards)
+  const error = useSelector(state => state.cards.error)
+  const loading = useSelector(state => state.cards.loading)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchCards(type))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type])
+  
   if(error) return <h2>Error</h2>
   if(loading) return <img src='https://ak6.picdn.net/shutterstock/videos/28831216/thumb/1.jpg' alt='loadingImg' style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
 
@@ -24,11 +27,7 @@ function MainPage () {
   }
 
   function handleDetail(id) {
-    if(id === undefined) {
-      console.log('error')
-    } else {
-      history.push(`/Detail/${id}`)
-    }
+    history.push(`/Detail/${id}`)
   }
 
   function handleFavorites(id) {
@@ -41,11 +40,16 @@ function MainPage () {
         }
       })
       .then(data => {
-        dispatch(setFavorites(data.data[0]))
+        const dupe = favorites.find(founded => founded.id === data.data[0].id)
+        if (dupe) {
+          console.log('data exists in favorites')
+        } else {
+          dispatch(setFavorites(data.data[0]))
+        }
       })
       .catch(e => console.log(e))
   }
-  console.log(favorites)
+
   const columns = 
   [
     {
@@ -94,11 +98,13 @@ function MainPage () {
     {
       Header: 'Favorites',
       Cell: ({ cell }) => (
-        <button className="btn btn-outline-warning" value={cell.row.original.id} onClick={() => handleFavorites(cell.row.original.id)}><i className="fas fa-star"></i></button>
+        <button className="btn btn-outline-warning" value={cell.row.original.id} onClick={() => handleFavorites(cell.row.original.id)}>
+          {favorites.find(founded => founded.id === cell.row.original.id) ? <i className="fas fa-star"></i> : <i className="far fa-star"></i>}
+        </button>
       )
     }
   ]
-  const data = card.data
+  const data = cards.data
 
   return (
     <div>
